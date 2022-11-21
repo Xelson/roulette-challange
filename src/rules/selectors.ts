@@ -37,6 +37,63 @@ export namespace GameRules {
 
 	export const ColumnThirdNumbers = 
 		AllNumbers.filter(n => (n + 2) % 3 == 0)
+
+	export const RandomNumber = () => Math.floor(Math.random() * 37.0)
+
+	export const betShemas = {
+		Straight: (number: number) => ({
+			numbersSet: number,
+			multiplier: 35
+		}),
+		Red: {
+			numbersSet: RedNumbers,
+			multiplier: 1
+		},
+		Black: {
+			numbersSet: BlackNumbers,
+			multiplier: 1
+		},
+		Even: {
+			numbersSet: EvenNumbers,
+			multiplier: 1
+		},
+		Odd: {
+			numbersSet: OddNumbers,
+			multiplier: 1
+		},
+		Low: {
+			numbersSet: LowNumbers,
+			multiplier: 1
+		},
+		High: {
+			numbersSet: HighNumbers,
+			multiplier: 1
+		},
+		DozenFirst: {
+			numbersSet: DozenFirstNumbers,
+			multiplier: 2
+		},
+		DozenSecond: {
+			numbersSet: DozenSecondNumbers,
+			multiplier: 2
+		},
+		DozenThird: {
+			numbersSet: DozenThirdNumbers,
+			multiplier: 2
+		},
+		ColumnFirst: {
+			numbersSet: ColumnFirstNumbers,
+			multiplier: 2
+		},
+		ColumnSecond: {
+			numbersSet: ColumnSecondNumbers,
+			multiplier: 2
+		},
+		ColumnThird: {
+			numbersSet: ColumnThirdNumbers,
+			multiplier: 2
+		},
+	}
 }
 
 export function isNumberRed(number: number) {

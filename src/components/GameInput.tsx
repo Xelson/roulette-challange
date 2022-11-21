@@ -1,3 +1,4 @@
+import { useBetAction, usePlayAgainAction } from "../rules/hooks";
 import { 
 	useActiveBets, 
 	useCurrentBet, 
@@ -8,14 +9,20 @@ import {
 import { BetCoin } from "./Bet";
 
 export function GameInputRenderer() {
+	const {
+		isCanResetBets, 
+		isCanPerformAction: isCanBet,
+		resetBets,
+		performAction: performBet
+	} = useBetAction();
+
+	const {
+		isShouldPerformAction: isShouldPlayAgain,
+		performAction: performPlayAgain
+	} = usePlayAgainAction();
+
 	const [currentBet, setCurrentBet] = useCurrentBet();
 	const balanceWithBets = useCurrentBalanceWithBets();
-	
-	const [activeBets] = useActiveBets();
-	const resetActiveBets = useResetActiveBets();
-
-	const isBetsClear = !activeBets.length;
-	const isCanBet = balanceWithBets >= 0;
 
 	return (
 		<div className="GameInput">
@@ -34,13 +41,20 @@ export function GameInputRenderer() {
 				))}
 			</div>
 			<div className="GameInput__Actions">
-				<button disabled={isBetsClear || !isCanBet}>Bet</button>
-				<button 
-					disabled={isBetsClear}
-					onClick={resetActiveBets}
-				>
-					Clear Bets
-				</button>
+				{isShouldPlayAgain ? (
+					<button className="Button--PlayAgain" onClick={performPlayAgain}>
+						Play again!
+					</button>
+				) : (
+					<>
+						<button disabled={!isCanBet} onClick={performBet}>
+							Bet
+						</button>
+						<button disabled={!isCanResetBets} onClick={resetBets}>
+							Clear Bets
+						</button>
+					</>
+				)}
 			</div>
 		</div>
 	);

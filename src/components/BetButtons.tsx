@@ -96,9 +96,8 @@ function getCircleRelativePosition(radius: number, degree: number) {
 export const BoardBetButtons = {
 	Zero: () => (
 		<BoardBetButtonWithSelection
-			numbersSet={0}
-			multiplier={35}
-			
+			{...GameRules.betShemas.Straight(0)}
+
 			className="Button--Zero"
 		>
 			0
@@ -106,16 +105,14 @@ export const BoardBetButtons = {
 	),
 	Number: ({number}: {number: number}) => (
 		<BoardBetButtonWithSelection
-			numbersSet={number}
-			multiplier={35}
+			{...GameRules.betShemas.Straight(number)}
 
 			className={classNames('Ball', isNumberRed(number) && 'Ball--Red')}
 		/>
 	),
 	Red: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.RedNumbers} 
-			multiplier={1}
+			{...GameRules.betShemas.Red}
 
 			className="Button--BgRed" 
 			colSpan={2}
@@ -123,8 +120,7 @@ export const BoardBetButtons = {
 	),
 	Black: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.BlackNumbers} 
-			multiplier={1}
+			{...GameRules.betShemas.Black}
 
 			className="Button--BgBlack" 
 			colSpan={2}
@@ -132,8 +128,7 @@ export const BoardBetButtons = {
 	),
 	Even: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.EvenNumbers}
-			multiplier={1}
+			{...GameRules.betShemas.Even}
 
 			colSpan={2}
 		>
@@ -142,8 +137,7 @@ export const BoardBetButtons = {
 	),
 	Odd: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.OddNumbers}
-			multiplier={1}
+			{...GameRules.betShemas.Odd}
 
 			colSpan={2}
 		>
@@ -152,8 +146,7 @@ export const BoardBetButtons = {
 	),
 	Low: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.LowNumbers}
-			multiplier={1}
+			{...GameRules.betShemas.Low}
 
 			colSpan={2}
 		>
@@ -162,8 +155,7 @@ export const BoardBetButtons = {
 	),
 	High: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.HighNumbers}
-			multiplier={1}
+			{...GameRules.betShemas.High}
 
 			colSpan={2}
 		>
@@ -172,8 +164,7 @@ export const BoardBetButtons = {
 	),
 	DozenFirst: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.DozenFirstNumbers}
-			multiplier={2}
+			{...GameRules.betShemas.DozenFirst}
 
 			colSpan={4}
 		>
@@ -182,8 +173,7 @@ export const BoardBetButtons = {
 	),
 	DozenSecond: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.DozenSecondNumbers}
-			multiplier={2}
+			{...GameRules.betShemas.DozenSecond}
 
 			colSpan={4}
 		>
@@ -192,8 +182,7 @@ export const BoardBetButtons = {
 	),
 	DozenThird: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.DozenThirdNumbers}
-			multiplier={2}
+			{...GameRules.betShemas.DozenThird}
 
 			colSpan={4}
 		>
@@ -202,24 +191,21 @@ export const BoardBetButtons = {
 	),
 	ColumnFirst: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.ColumnFirstNumbers}
-			multiplier={2}
+			{...GameRules.betShemas.ColumnFirst}
 		>
 			2:1
 		</BoardBetButtonWithSelection>
 	),
 	ColumnSecond: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.ColumnSecondNumbers}
-			multiplier={2}
+			{...GameRules.betShemas.ColumnSecond}
 		>
 			2:1
 		</BoardBetButtonWithSelection>
 	),
 	ColumnThird: () => (
 		<BoardBetButtonWithSelection 
-			numbersSet={GameRules.ColumnThirdNumbers}
-			multiplier={2}
+			{...GameRules.betShemas.ColumnThird}
 		>
 			2:1
 		</BoardBetButtonWithSelection>

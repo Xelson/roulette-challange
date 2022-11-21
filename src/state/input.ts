@@ -9,7 +9,7 @@ export interface BetRecord {
 
 export const inputCurrentBet = atom(1);
 export const inputActiveBets = atomWithReset<BetRecord[]>([])
-export const inputCurrentBalance = atom(100);
+export const inputCurrentBalance = atomWithReset(100);
 export const inputCurrentBalanceWithBets = atom(get => (
 	get(inputCurrentBalance) - get(inputActiveBets).reduce((sum, r) => sum + r.value, 0)
 ));
@@ -20,6 +20,10 @@ export function useCurrentBet() {
 
 export function useCurrentBalance() {
 	return useAtom(inputCurrentBalance);
+}
+
+export function useResetCurrentBalance() {
+	return useResetAtom(inputCurrentBalance);
 }
 
 export function useCurrentBalanceWithBets() {

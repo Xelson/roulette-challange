@@ -1,12 +1,12 @@
 import { atom, useAtom, useAtomValue } from "jotai";
-import { atomWithReset, useResetAtom } from 'jotai/utils'
+import { atomWithReset, useResetAtom } from "jotai/utils";
 
 export interface TopNumbers {
 	number: number,
 	place: number
 }
 
-export const rouletteHistory = atom<number[]>([32, 1, 8, 11, 23, 23, 3, 7, 8, 23, 11, 5, 32, 10])
+export const rouletteHistory = atomWithReset<number[]>([])
 
 export const rouletteOrderedNumbers = atom<Array<TopNumbers>>(get => {
 	const numbers = new Map<number, number>();
@@ -29,6 +29,10 @@ export const rouletteColdNumbers = atom<Array<TopNumbers>>(get => (
 
 export function useRouletteHistory() {
 	return useAtom(rouletteHistory);
+}
+
+export function useResetRouletteHistory() {
+	return useResetAtom(rouletteHistory);
 }
 
 export function useRouletteHotNumbers() {
