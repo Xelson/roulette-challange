@@ -46,7 +46,7 @@ export function GameStatsRenderer() {
 	return (
 		<div className="GameStats">
 			<div className="GameStats__History">
-				{history.slice(0, 13).map((v, index) => <Ball key={index} number={v} />)}
+				{history.slice(0, 12).map((v, index) => <Ball key={index} number={v} />)}
 			</div>
 			<div className="GameStats__TopNumbers">
 				<div className="GameStats__HotNumbers" data-hidden={!hotNumbers.length}>

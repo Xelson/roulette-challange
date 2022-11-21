@@ -1,8 +1,10 @@
-import { useBetAction, usePlayAgainAction } from "../rules/hooks";
 import { 
-	useActiveBets, 
+	useBetAction, 
+	usePlayAgainAction 
+} from "../rules/hooks";
+
+import { 
 	useCurrentBet, 
-	useResetActiveBets,
 	useCurrentBalanceWithBets  
 } from "../state/input";
 

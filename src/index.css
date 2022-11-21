@@ -302,7 +302,7 @@ td.Ball:hover::after {
 .GameStats__History {
 	display: flex;
 	gap: 5px;
-	max-width: 700px;
+	width: 100%;
 	min-height: 80px;
 	box-sizing: border-box;
 	overflow: hidden;
