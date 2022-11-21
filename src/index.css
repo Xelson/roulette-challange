@@ -5,12 +5,186 @@
 	font-weight: 400;
 
 	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+	background-color: #008533;
+}
 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-text-size-adjust: 100%;
+body {
+	overflow: hidden;
+}
+
+button {
+	min-width: 120px;
+	height: 30px;
+	border: none;
+	border-radius: 10px;
+	background: #161616;
+	border: 3px solid black;
+	font-weight: 800;
+	cursor: pointer;
+	user-select: none;
+}
+
+button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.App {
+	display: flex;
+	flex-direction: column;
+	gap: 75px;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+td, th {
+	border: 3px solid white;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+.Board {
+	position: relative;
+}
+
+.Board::before {
+	content: '';
+	display: block;
+	height: 156px;
+	width: 50px;
+	position: absolute;
+	left: -50px;
+
+	border-top: 3px solid white;
+	border-bottom: 3px solid white;
+	border-left: 3px solid white;
+	border-radius: 100% 0 0 100%;
+}
+
+td.Empty {
+	border: 0;
+}
+
+td.Button {
+	text-align: center;
+	font-weight: 800;
+	padding: 10px;
+	cursor: pointer;
+}
+
+td.Button:hover {
+	opacity: 0.7;
+}
+
+td.Button--BgRed {
+	background: #d40058;
+}
+
+td.Button--BgBlack {
+	background: #222;
+}
+
+td.Ball {
+	height: 50px;
+	padding: 0;
+}
+
+td.Ball::after {
+	background: #222;
+}
+
+td.Ball.Ball--Red::after {
+	background: #d40058;
+}
+
+td.Ball::after {
+	position: relative;
+	content: attr(data-number);
+	background: #222;
+	border-radius: 50px;
+	transform: rotate(-90deg);
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	font-size: 18pt;
+	font-weight: 800;
+	cursor: pointer;
+
+	width: 50px;
+	height: 50px;
+}
+
+td.Ball:hover::after {
+	opacity: 0.75;
+}
+
+.GameInput {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+}
+
+.GameInput__BalancePanel {
+	font-weight: 800;
+}
+
+.GameInput__BetCoins {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+}
+
+.GameInput__Actions {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+}
+
+.BetCoin {
+	width: 40px;
+	height: 40px;
+	border-radius: 40px;
+	background: #e9e9e9;
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #2b2b2b;
+	font-size: 16pt;
+	user-select: none;
+	cursor: pointer;
+
+	border: 5px dashed #2b2b2b;
+	box-shadow: 1px 0px 5px black;
+
+	opacity: 0.5;
+	transition: all 50ms ease-in-out;
+}
+
+.BetCoin--blue {
+	border-color: #0098d4;
+}
+
+.BetCoin--yellow {
+	border-color: #c9bb00;
+}
+
+.BetCoin--red {
+	border-color: #d40058;
+}
+
+.BetCoin--green {
+	border-color: #00d435;
+}
+
+
+.BetCoin[data-active] {
+	transform: translateY(-20px);
+	opacity: 1.0;
 }

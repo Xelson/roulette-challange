@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { BoardRenderer } from './components/BoardRenderer'
+import { GameInputRenderer } from './components/GameInput'
 
 export default function App() {
-	const [count, setCount] = useState(0)
-	
 	return (
 		<div className="App">
-			<button onClick={() => setCount(c => c + 1)}>Counter: {count}</button>
+			<BoardRenderer />
+			<GameInputRenderer />
  		</div>
 	)
 }
