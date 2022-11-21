@@ -1,11 +1,15 @@
-import { BoardRenderer } from './components/BoardRenderer'
+import { BoardRenderer } from './components/GameBoard'
 import { GameInputRenderer } from './components/GameInput'
+import { GameStatsRenderer } from './components/GameStats'
 
 export default function App() {
 	return (
 		<div className="App">
-			<BoardRenderer />
-			<GameInputRenderer />
+			<div className="GameField">
+				<BoardRenderer />
+				<GameInputRenderer />
+				<GameStatsRenderer />
+			</div>
  		</div>
 	)
 }

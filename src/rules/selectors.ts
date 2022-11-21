@@ -6,7 +6,7 @@ export namespace GameRules {
 		[1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 
 	export const BlackNumbers = 
-		[2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
+		AllNumbers.filter(n => !RedNumbers.includes(n))
 
 	export const EvenNumbers = 
 		AllNumbers.filter(n => n % 2 == 0)
@@ -43,12 +43,15 @@ export function isNumberRed(number: number) {
 	return GameRules.RedNumbers.includes(number);
 }
 
+function numbersInDOM() {
+	const boardInDOM = document.querySelector('.GameBoard');
+	return boardInDOM ? Array.from(boardInDOM.querySelectorAll<HTMLElement>('[data-number]')) : [];
+}
+
 export function numbersInDOMSelector(numbersToSelect: number[]) {
-	const numbersInDOM = document.querySelectorAll<HTMLElement>('[data-number]');
-	return Array.from(numbersInDOM).filter(element => numbersToSelect.includes(Number(element.getAttribute('data-number'))));
+	return numbersInDOM().filter(element => numbersToSelect.includes(Number(element.getAttribute('data-number'))));
 }
 
 export function numbersInDOMSelectorReverse(numbersToExclude: number[]) {
-	const numbersInDOM = document.querySelectorAll<HTMLElement>('[data-number]');
-	return Array.from(numbersInDOM).filter(element => !numbersToExclude.includes(Number(element.getAttribute('data-number'))));
+	return numbersInDOM().filter(element => !numbersToExclude.includes(Number(element.getAttribute('data-number'))));
 }

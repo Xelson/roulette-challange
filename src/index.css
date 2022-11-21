@@ -8,6 +8,18 @@
 	background-color: #008533;
 }
 
+[data-disabled] {
+	cursor: not-allowed !important;
+}
+
+[data-hidden] {
+	transition: opacity 100ms;
+}
+
+[data-hidden="true"] {
+	opacity: 0;
+}
+
 body {
 	overflow: hidden;
 }
@@ -38,6 +50,12 @@ button:disabled {
 	height: 100vh;
 }
 
+.GameField {
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+}
+
 td, th {
 	border: 3px solid white;
 }
@@ -46,22 +64,8 @@ table {
 	border-collapse: collapse;
 }
 
-.Board {
+.GameBoard {
 	position: relative;
-}
-
-.Board::before {
-	content: '';
-	display: block;
-	height: 156px;
-	width: 50px;
-	position: absolute;
-	left: -50px;
-
-	border-top: 3px solid white;
-	border-bottom: 3px solid white;
-	border-left: 3px solid white;
-	border-radius: 100% 0 0 100%;
 }
 
 td.Empty {
@@ -73,6 +77,21 @@ td.Button {
 	font-weight: 800;
 	padding: 10px;
 	cursor: pointer;
+	position: relative;
+	user-select: none;
+}
+
+.Button__Bets {
+	position: absolute;
+	top: 0;
+	z-index: 1;
+}
+
+.Button__Bets > .BetCoin {
+	position: absolute;
+	transform: scale(0.6);
+	display: flex;
+	z-index: 1;
 }
 
 td.Button:hover {
@@ -87,20 +106,55 @@ td.Button--BgBlack {
 	background: #222;
 }
 
+td.Button--Zero {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	position: absolute;
+	height: 136px;
+	width: 30px;
+	position: absolute;
+	left: -50px;
+
+	border-top: 3px solid white;
+	border-bottom: 3px solid white;
+	border-left: 3px solid white;
+	border-right: none;
+	border-radius: 100% 0 0 100%;
+
+	font-size: 18pt;
+
+	opacity: 1.0 !important;
+}
+
+td.Button--Zero:hover {
+	color: #FFFFFFaa;
+}
+
+td.Button--Zero .Button__Bets {
+	top: 50px;
+	left: -15px;
+}
+
 td.Ball {
 	height: 50px;
 	padding: 0;
 }
 
-td.Ball::after {
+.Ball {
+	position: relative;
+}
+
+.Ball::after {
 	background: #222;
 }
 
-td.Ball.Ball--Red::after {
+.Ball.Ball--Red::after {
 	background: #d40058;
 }
 
-td.Ball::after {
+.Ball::after {
 	position: relative;
 	content: attr(data-number);
 	background: #222;
@@ -117,6 +171,29 @@ td.Ball::after {
 
 	width: 50px;
 	height: 50px;
+}
+
+.Ball[data-disabled]::after {
+	cursor: not-allowed;
+}
+
+.Ball.Ball--topIndicator::before {
+	content: attr(data-top);
+	position: absolute;
+	z-index: 1;
+	right: -4px;
+	top: -4px;
+	font-weight: 600;
+	width: 15px;
+	height: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: black;
+	font-size: 11pt;
+	border-radius: 100%;
+	padding: 3px;
+	color: white;
 }
 
 td.Ball:hover::after {
@@ -157,13 +234,12 @@ td.Ball:hover::after {
 	justify-content: center;
 	color: #2b2b2b;
 	font-size: 16pt;
+	font-weight: 600;
 	user-select: none;
-	cursor: pointer;
 
 	border: 5px dashed #2b2b2b;
 	box-shadow: 1px 0px 5px black;
 
-	opacity: 0.5;
 	transition: all 50ms ease-in-out;
 }
 
@@ -172,7 +248,7 @@ td.Ball:hover::after {
 }
 
 .BetCoin--yellow {
-	border-color: #c9bb00;
+	border-color: #e4a700;
 }
 
 .BetCoin--red {
@@ -183,8 +259,81 @@ td.Ball:hover::after {
 	border-color: #00d435;
 }
 
+.GameInput__BetCoins .BetCoin {
+	opacity: 0.5;
+	cursor: pointer;
+}
 
-.BetCoin[data-active] {
+.GameInput__BetCoins .BetCoin[data-active] {
 	transform: translateY(-20px);
 	opacity: 1.0;
+}
+
+.GameStats {
+	font-weight: 800;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.GameStats__History {
+	display: flex;
+	gap: 5px;
+	max-width: 700px;
+	min-height: 80px;
+	box-sizing: border-box;
+	overflow: hidden;
+
+	background: #304638;
+	border-radius: 25px;
+	padding: 15px;
+	border: 3px solid #151f19;
+	width: 580px;
+}
+
+.GameStats .Ball::after {
+	transform: none;
+	transform: scale(0.85);
+}
+
+.GameStats__TopNumbers {
+	display: flex;
+	flex-direction: row;
+	gap: 15px;
+}
+
+.GameStats__HotNumbers {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	background: #ffe4cd;
+	border-radius: 25px;
+	padding: 15px;
+	border: 3px solid #ff922c;
+	color: #ff922c;
+	box-shadow: 1px 0px 5px black;
+}
+
+.GameStats__HotNumbers .Ball::after {
+	background: #ff922c;
+	color: white;
+}
+
+.GameStats__ColdNumbers {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	background: #c7dfff;
+	border-radius: 25px;
+	padding: 15px;
+	border: 3px solid #2c87ff;
+	color: #2c87ff;
+	box-shadow: 1px 0px 5px black;
+}
+
+.GameStats__ColdNumbers .Ball::after {
+	background: #2c87ff;
+	color: white;
 }

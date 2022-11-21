@@ -6,27 +6,49 @@ import {
 
 import { forwardRef } from "react";
 import { classNames } from "../utils/attributes";
+import { BetRecord, useActiveBets, useCurrentBalanceWithBets, useCurrentBet } from "../state/input";
+import { BetCoin } from "./Bet";
 
-interface BoardBetButtonWithSelectionProps extends React.HTMLProps<HTMLTableCellElement> {
-	numbersSet?: number[],
-	betMultiplier: number
-}
+type BoardBetButtonWithSelectionProps = React.HTMLProps<HTMLTableCellElement> & Omit<BetRecord, 'value'>;
 
 export const BoardBetButtonWithSelection = forwardRef<HTMLTableCellElement, BoardBetButtonWithSelectionProps>((allProps, ref) => {
-	const { numbersSet, ...props } = allProps;
+	const { numbersSet, multiplier, children, ...props } = allProps;
+	const isNumbersArray = Array.isArray(numbersSet);
+
+	const balance = useCurrentBalanceWithBets();
+	const [activeBets, setActiveBets] = useActiveBets();
+	const [currentBet] = useCurrentBet();
+
+	const isCanBet = balance - currentBet >= 0;
 
 	function onMouseEnter(event: React.MouseEvent<HTMLTableCellElement>) {
 		props.onMouseEnter?.(event);
 		
-		if(numbersSet)
+		if(isNumbersArray)
 			numbersInDOMSelectorReverse(numbersSet).map(element => element.style.opacity = "0.2");
 	}
 
 	function onMouseLeave(event: React.MouseEvent<HTMLTableCellElement>) {
 		props.onMouseLeave?.(event);
 
-		if(numbersSet)
+		if(isNumbersArray)
 			numbersInDOMSelectorReverse(numbersSet).map(element => element.style.opacity = "1.0");
+	}
+
+	function onButtonClick(event: React.MouseEvent<HTMLTableCellElement>) {
+		props.onClick?.(event);
+
+		if(!event.shiftKey) {
+			if(isCanBet) {
+				setActiveBets(bet => [...bet, {numbersSet, multiplier, value: currentBet}]);
+			}
+		}
+		else {
+			const lastButtonBet = activeBets.filter(b => b.numbersSet == numbersSet).pop();
+			if(lastButtonBet) {
+				setActiveBets(bet => bet.filter(b => b != lastButtonBet));
+			}
+		}
 	}
 
 	return (
@@ -35,23 +57,65 @@ export const BoardBetButtonWithSelection = forwardRef<HTMLTableCellElement, Boar
 			ref={ref} 
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave} 
+			onClick={onButtonClick}
 			className={classNames('Button', props.className)}
-		/>
+			data-number={!isNumbersArray ? numbersSet : undefined}
+			data-disabled={!isCanBet ? true : undefined}
+		>
+			<div className="Button__Bets">
+				{activeBets
+					.filter(bet => bet.numbersSet == numbersSet)
+					.map((bet, index) => {
+						const pos = getCircleRelativePosition(15, index * 25);
+
+						return (
+							<BetCoin 
+								key={index}
+								style={{top: pos[1], left: pos[0]}}
+							>
+								{bet.value}
+							</BetCoin>
+						);
+					})
+				}
+			</div>
+			{children}
+		</td>
 	);
 });
 
+function getCircleRelativePosition(radius: number, degree: number) {
+	const degrees_to_radians = (d: number) => d * (Math.PI / 180);
+
+	return [
+		radius * Math.cos(degrees_to_radians(degree)),
+		radius * Math.sin(degrees_to_radians(degree))
+	]
+}
+
 export const BoardBetButtons = {
+	Zero: () => (
+		<BoardBetButtonWithSelection
+			numbersSet={0}
+			multiplier={35}
+			
+			className="Button--Zero"
+		>
+			0
+		</BoardBetButtonWithSelection>
+	),
 	Number: ({number}: {number: number}) => (
 		<BoardBetButtonWithSelection
-			data-number={number}
+			numbersSet={number}
+			multiplier={35}
+
 			className={classNames('Ball', isNumberRed(number) && 'Ball--Red')}
-			betMultiplier={35}
 		/>
 	),
 	Red: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.RedNumbers} 
-			betMultiplier={1}
+			multiplier={1}
 
 			className="Button--BgRed" 
 			colSpan={2}
@@ -60,7 +124,7 @@ export const BoardBetButtons = {
 	Black: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.BlackNumbers} 
-			betMultiplier={1}
+			multiplier={1}
 
 			className="Button--BgBlack" 
 			colSpan={2}
@@ -69,7 +133,7 @@ export const BoardBetButtons = {
 	Even: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.EvenNumbers}
-			betMultiplier={1}
+			multiplier={1}
 
 			colSpan={2}
 		>
@@ -79,7 +143,7 @@ export const BoardBetButtons = {
 	Odd: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.OddNumbers}
-			betMultiplier={1}
+			multiplier={1}
 
 			colSpan={2}
 		>
@@ -89,7 +153,7 @@ export const BoardBetButtons = {
 	Low: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.LowNumbers}
-			betMultiplier={1}
+			multiplier={1}
 
 			colSpan={2}
 		>
@@ -99,7 +163,7 @@ export const BoardBetButtons = {
 	High: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.HighNumbers}
-			betMultiplier={1}
+			multiplier={1}
 
 			colSpan={2}
 		>
@@ -109,7 +173,7 @@ export const BoardBetButtons = {
 	DozenFirst: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.DozenFirstNumbers}
-			betMultiplier={2}
+			multiplier={2}
 
 			colSpan={4}
 		>
@@ -119,7 +183,7 @@ export const BoardBetButtons = {
 	DozenSecond: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.DozenSecondNumbers}
-			betMultiplier={2}
+			multiplier={2}
 
 			colSpan={4}
 		>
@@ -129,7 +193,7 @@ export const BoardBetButtons = {
 	DozenThird: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.DozenThirdNumbers}
-			betMultiplier={2}
+			multiplier={2}
 
 			colSpan={4}
 		>
@@ -139,7 +203,7 @@ export const BoardBetButtons = {
 	ColumnFirst: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.ColumnFirstNumbers}
-			betMultiplier={2}
+			multiplier={2}
 		>
 			2:1
 		</BoardBetButtonWithSelection>
@@ -147,7 +211,7 @@ export const BoardBetButtons = {
 	ColumnSecond: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.ColumnSecondNumbers}
-			betMultiplier={2}
+			multiplier={2}
 		>
 			2:1
 		</BoardBetButtonWithSelection>
@@ -155,7 +219,7 @@ export const BoardBetButtons = {
 	ColumnThird: () => (
 		<BoardBetButtonWithSelection 
 			numbersSet={GameRules.ColumnThirdNumbers}
-			betMultiplier={2}
+			multiplier={2}
 		>
 			2:1
 		</BoardBetButtonWithSelection>

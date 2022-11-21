@@ -1,36 +1,46 @@
-import { useCurrentBet } from "../state/input";
-import { classNames } from "../utils/attributes";
+import { 
+	useActiveBets, 
+	useCurrentBet, 
+	useResetActiveBets,
+	useCurrentBalanceWithBets  
+} from "../state/input";
 
-const betCoins: Array<[number, string]> = [
-	[1, 'BetCoin--blue'],
-	[2, 'BetCoin--yellow'],
-	[5, 'BetCoin--red'],
-	[25, 'BetCoin--green'],
-];
+import { BetCoin } from "./Bet";
 
 export function GameInputRenderer() {
 	const [currentBet, setCurrentBet] = useCurrentBet();
+	const balanceWithBets = useCurrentBalanceWithBets();
+	
+	const [activeBets] = useActiveBets();
+	const resetActiveBets = useResetActiveBets();
+
+	const isBetsClear = !activeBets.length;
+	const isCanBet = balanceWithBets >= 0;
 
 	return (
 		<div className="GameInput">
 			<div className="GameInput__BalancePanel">
-				<p>Balance: {100}</p>
+				<p>Balance: {balanceWithBets}</p>
 			</div>
 			<div className="GameInput__BetCoins">
-				{betCoins.map(bet => (		
-					<div 
-						key={bet[0]} 
-						className={classNames('BetCoin', bet[1])}
-						onClick={() => setCurrentBet(bet[0])}
-						data-active={bet[0] == currentBet ? true : undefined}
+				{[1, 2, 5, 25].map(bet => (		
+					<BetCoin 
+						key={bet} 
+						onClick={() => setCurrentBet(bet)}
+						data-active={bet == currentBet ? true : undefined}
 					>
-						{bet[0]}
-					</div>
+						{bet}
+					</BetCoin>
 				))}
 			</div>
 			<div className="GameInput__Actions">
-				<button>Bet</button>
-				<button disabled>Clear Bets</button>
+				<button disabled={isBetsClear || !isCanBet}>Bet</button>
+				<button 
+					disabled={isBetsClear}
+					onClick={resetActiveBets}
+				>
+					Clear Bets
+				</button>
 			</div>
 		</div>
 	);

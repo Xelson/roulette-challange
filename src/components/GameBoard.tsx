@@ -2,7 +2,7 @@ import { BoardBetButtons } from "./BetButtons";
 
 export function Board({children}: React.PropsWithChildren) {
 	return (
-		<div className="Board">
+		<div className="GameBoard">
 			<table>
 				<tbody>
 					{children}
@@ -77,6 +77,9 @@ export function BoardRowDoubleMoneyBets() {
 export function BoardRenderer() {
 	return (
 		<Board>
+			<BoardRow>
+				<BoardBetButtons.Zero />
+			</BoardRow>
 			<BoardFirstNumbersRow />
 			<BoardSecondNumbersRow />
 			<BoardThirdNumbersRow />
